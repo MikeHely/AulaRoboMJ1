@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8"><title>Painel Admin - JM</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  table{width:100%; border-collapse:collapse; background:white;}
+  th,td{padding:12px; border:1px solid #ddd; text-align:left;}
+  th{background:var(--cor-principal); color:white;}
+  .status-Pendente{color:orange;} .status-Pago{color:green;} .status-Enviado{color:blue;}
+</style>
+</head>
+<body>
+<header><nav><h1>JM Admin</h1></nav></header>
+
+<section>
+  <h2>Pedidos Recebidos</h2>
+  <table id="tabela-pedidos">
+    <thead>
+      <tr>
+        <th>ID</th><th>Cliente</th><th>Total</th><th>Forma Pagto</th><th>Status</th><th>Ação</th>
+      </tr>
+    </thead>
+    <tbody>Carregando...</tbody>
+  </table>
+</section>
+
+<script>
+const API_URL = "https://jm-server.onrender.com"; // SUA URL DO BACKEND
+
+async function carregarPedidos() {
+  const res = await fetch(`${API_URL}/api/admin/pedidos`);
+  const pedidos = await res.json();
+  const tbody = document.querySelector('#tabela-pedidos tbody');
+  tbody.innerHTML = '';
+  
+  pedidos.forEach(p => {
+    tbody.innerHTML += `
+      <tr>
+        <td>#${p.id}</td>
+        <td>${p.nome_cliente} <br> ${p.telefone}</td>
+        <td>${p.total.toLocaleString('pt-AO')} KZ</td>
+        <td>${p.forma_pagamento}</td>
+        <td class="status-${p.status}">${p.status}</td>
+        <td>
+          <button onclick="mudarStatus(${p.id}, 'Enviado')">Marcar Enviado</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+async function mudarStatus(pedido_id, status) {
+  await fetch(`${API_URL}/api/admin/pedido/${pedido_id}`, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({status})
+  });
+  alert("Status atualizado!");
+  carregarPedidos();
+}
+
+carregarPedidos();
+</script>
+</body>
+</html>

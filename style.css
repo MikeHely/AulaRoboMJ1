@@ -1,0 +1,19 @@
+:root{--cor-principal: #1E3A8A; --cor-preco: #16A34A; --cor-fundo: #F8FAFC;}
+*{margin:0; padding:0; box-sizing:border-box; font-family: 'Arial', sans-serif;}
+body{background: var(--cor-fundo);} header{background: white; box-shadow:0 2px 5px rgba(0,0,0,0.1); position:sticky; top:0; z-index:10;}
+nav{max-width:1200px; margin:auto; padding:15px 20px; display:flex; justify-content:space-between; align-items:center;}
+nav h1{color:var(--cor-principal); font-size:2em;} .carrinho-icone{font-size:24px; cursor:pointer; position:relative;}
+#carrinho-count{background:red; color:white; border-radius:50%; padding:2px 6px; font-size:12px; position:absolute; top:-8px; right:-8px;}
+.banner{background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80') center/cover; height:40vh; display:flex; align-items:center; justify-content:center; color:white; text-align:center;}
+.banner h2{font-size:2.5em;} .btn{background:var(--cor-principal); color:white; padding:12px 25px; border-radius:8px; text-decoration:none; font-weight:bold; border:none; cursor:pointer;}
+.btn-whatsapp{background:#25D366;} .btn-whatsapp:hover{background:#128C7E;}
+section{padding:40px 20px; max-width:1200px; margin:auto;} h2{text-align:center; margin-bottom:20px; color:#333;}
+.filtros{display:flex; gap:10px; justify-content:center; margin-bottom:20px;} .filtros button{padding:8px 15px; border:1px solid #ccc; background:white; border-radius:5px; cursor:pointer;}
+.produtos{display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:25px;}
+.produto{background:white; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.produto img{width:100%; height:200px; object-fit:cover;} .produto-info{padding:15px;} .tag{background:#eee; padding:3px 8px; font-size:12px; border-radius:5px;}
+.preco{color:var(--cor-preco); font-size:20px; font-weight:bold; margin:10px 0;}
+.modal{display:none; position:fixed; z-index:20; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5);}
+.modal-conteudo{background:white; margin:10% auto; padding:20px; width:90%; max-width:500px; border-radius:10px;}
+.fechar{float:right; font-size:28px; cursor:pointer;} footer{background:#222; color:white; text-align:center; padding:30px 20px; margin-top:40px;}
+input{width:100%; padding:10px; margin:10px 0; border:1px solid #ccc; border-radius:5px;}

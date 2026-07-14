@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JM Store - Qualidade e Preço Justo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><nav><h1>JM</h1><div id="user-area"><button onclick="abrirLogin()">Entrar</button></div><div class="carrinho-icone" onclick="abrirCarrinho()">🛒 <span id="carrinho-count">0</span></div></nav></header>
+<section class="banner"><div><h2>Bem-vindo à JM Store</h2><p>iPhone, Tênis e T-Shirts com entrega em Luanda</p></div></section>
+<section id="produtos"><h2>Nossos Produtos</h2><div class="filtros"><button onclick="filtrar('todos')">Todos</button><button onclick="filtrar('iphone')">iPhone</button><button onclick="filtrar('tenis')">Tênis</button><button onclick="filtrar('tshirt')">T-shirt</button></div><div class="produtos" id="lista-produtos">Carregando...</div></section>
+
+<div id="modal-login" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharLogin()">&times;</span><h2>Login JM</h2><input id="email" placeholder="Email"><input id="senha" type="password" placeholder="Senha"><button class="btn" onclick="login()">Entrar</button><p>Não tem conta? <a href="#" onclick="cadastro()">Cadastre-se</a></p></div></div>
+<div id="modal-carrinho" class="modal"><div class="modal-conteudo"><span class="fechar" onclick="fecharCarrinho()">&times;</span><h2>Seu Carrinho</h2><div id="itens-carrinho"></div><h3>Total: <span id="total-carrinho">0</span> KZ</h3><button class="btn btn-whatsapp" onclick="finalizar()">Finalizar no WhatsApp</button></div></div>
+<footer><h3>JM Store</h3><p>Luanda - Angola</p><p>© 2026 JM</p></footer>
+<script src="script.js"></script>
+</body>
+</html>
