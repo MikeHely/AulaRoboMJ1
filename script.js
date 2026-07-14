@@ -1,4 +1,4 @@
-const API_URL = "https://SEU-SERVER.onrender.com"; // TROCA PELA URL DO RENDER
+const API_URL = "https://jm-server.onrender.com"; // TROCA PELA URL DO RENDER
 let usuarioLogado = JSON.parse(localStorage.getItem('userJM'));
 let todosProdutos = [];
 let categoriaAtiva = 'todos';
