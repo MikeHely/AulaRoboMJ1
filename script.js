@@ -35,6 +35,38 @@ function adicionarCarrinho(produto) {
   alert(`${produto.nome} adicionado!`);
 }
 
+// Tem que ter isso
+document.getElementById('btn-cadastrar').addEventListener('click', async () => {
+    const email = document.getElementById('email-cadastro').value;
+    const password = document.getElementById('senha-cadastro').value;
+    
+    const res = await fetch(`${API_URL}/api/register`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email, password})
+    });
+});
+
+async function carregarProdutos() {
+    try {
+        document.getElementById('loading').style.display = 'block'; // mostra "Carregando..."
+        const res = await fetch(`${API_URL}/api/produtos`);
+        
+        if(!res.ok) throw new Error("Erro ao buscar produtos: " + res.status);
+        
+        const produtos = await res.json();
+        console.log("Produtos recebidos:", produtos); // log pra debug
+        
+        // ... aqui vai seu código pra montar os cards
+        
+        document.getElementById('loading').style.display = 'none'; // esconde "Carregando..."
+    } catch (error) {
+        console.error("ERRO AO CARREGAR:", error); // isso vai aparecer no F12
+        document.getElementById('loading').innerText = "Erro ao carregar produtos";
+    }
+}
+
+
 function atualizarContador(){ document.getElementById('carrinho-count').innerText = JSON.parse(localStorage.getItem('carrinhoJM'))?.length || 0; }
 function abrirCarrinho(){ /* ...código do modal igual anterior... */ }
 function fecharCarrinho(){ document.getElementById('modal-carrinho').style.display = 'none'; }
