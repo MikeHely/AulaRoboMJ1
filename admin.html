@@ -1,66 +1,55 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-PT">
 <head>
-<meta charset="UTF-8"><title>Painel Admin - JM</title>
-<link rel="stylesheet" href="style.css">
-<style>
-  table{width:100%; border-collapse:collapse; background:white;}
-  th,td{padding:12px; border:1px solid #ddd; text-align:left;}
-  th{background:var(--cor-principal); color:white;}
-  .status-Pendente{color:orange;} .status-Pago{color:green;} .status-Enviado{color:blue;}
-</style>
+  <meta charset="UTF-8">
+  <title>Painel Admin - JM Store</title>
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-<header><nav><h1>JM Admin</h1></nav></header>
+  <header>
+    <nav>
+      <h1>JM Admin</h1>
+      <button onclick="logout()">Sair</button>
+    </nav>
+  </header>
 
-<section>
-  <h2>Pedidos Recebidos</h2>
-  <table id="tabela-pedidos">
-    <thead>
-      <tr>
-        <th>ID</th><th>Cliente</th><th>Total</th><th>Forma Pagto</th><th>Status</th><th>Ação</th>
-      </tr>
-    </thead>
-    <tbody>Carregando...</tbody>
-  </table>
-</section>
+  <div class="admin-container">
+    <div class="admin-header">
+      <h2>Gerenciar Produtos</h2>
+      <button class="btn" onclick="abrirModalNovo()">+ Novo Produto</button>
+    </div>
 
-<script>
-const API_URL = "https://jm-server.onrender.com"; // SUA URL DO BACKEND
+    <!-- FORM ADICIONAR/EDITAR -->
+    <form id="form-produto" class="form-produto">
+      <input type="hidden" id="produto-id">
+      <input id="nome" placeholder="Nome do Produto" required>
+      <input id="preco" type="number" placeholder="Preço KZ" required>
+      <select id="categoria">
+        <option value="iphone">iPhone</option>
+        <option value="tenis">Tênis</option>
+        <option value="tshirt">T-Shirt</option>
+      </select>
+      <input id="imagem" placeholder="URL da Imagem" required>
+      <button type="submit" class="btn">Salvar Produto</button>
+    </form>
 
-async function carregarPedidos() {
-  const res = await fetch(`${API_URL}/api/admin/pedidos`);
-  const pedidos = await res.json();
-  const tbody = document.querySelector('#tabela-pedidos tbody');
-  tbody.innerHTML = '';
-  
-  pedidos.forEach(p => {
-    tbody.innerHTML += `
-      <tr>
-        <td>#${p.id}</td>
-        <td>${p.nome_cliente} <br> ${p.telefone}</td>
-        <td>${p.total.toLocaleString('pt-AO')} KZ</td>
-        <td>${p.forma_pagamento}</td>
-        <td class="status-${p.status}">${p.status}</td>
-        <td>
-          <button onclick="mudarStatus(${p.id}, 'Enviado')">Marcar Enviado</button>
-        </td>
-      </tr>
-    `;
-  });
-}
+    <!-- TABELA DE PRODUTOS -->
+    <table class="tabela-produtos">
+      <thead>
+        <tr>
+          <th>Imagem</th>
+          <th>Nome</th>
+          <th>Preço</th>
+          <th>Categoria</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-body">
+        <!-- Produtos vão entrar aqui via JS -->
+      </tbody>
+    </table>
+  </div>
 
-async function mudarStatus(pedido_id, status) {
-  await fetch(`${API_URL}/api/admin/pedido/${pedido_id}`, {
-    method: 'PUT',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({status})
-  });
-  alert("Status atualizado!");
-  carregarPedidos();
-}
-
-carregarPedidos();
-</script>
+  <script src="admin.js"></script>
 </body>
 </html>

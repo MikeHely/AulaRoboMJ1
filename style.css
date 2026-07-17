@@ -1,19 +1,95 @@
-:root{--cor-principal: #1E3A8A; --cor-preco: #16A34A; --cor-fundo: #F8FAFC;}
+:root{
+  --cor-principal: #1E3A8A; 
+  --cor-preco: #16A34A; 
+  --cor-fundo: #F8FAFC;
+  --cor-hover: #162d6b;
+}
+
 *{margin:0; padding:0; box-sizing:border-box; font-family: 'Arial', sans-serif;}
-body{background: var(--cor-fundo);} header{background: white; box-shadow:0 2px 5px rgba(0,0,0,0.1); position:sticky; top:0; z-index:10;}
+body{background: var(--cor-fundo); color:#333;}
+
+header{background: white; box-shadow:0 2px 10px rgba(0,0,0,0.1); position:sticky; top:0; z-index:10;}
 nav{max-width:1200px; margin:auto; padding:15px 20px; display:flex; justify-content:space-between; align-items:center;}
-nav h1{color:var(--cor-principal); font-size:2em;} .carrinho-icone{font-size:24px; cursor:pointer; position:relative;}
-#carrinho-count{background:red; color:white; border-radius:50%; padding:2px 6px; font-size:12px; position:absolute; top:-8px; right:-8px;}
-.banner{background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80') center/cover; height:40vh; display:flex; align-items:center; justify-content:center; color:white; text-align:center;}
-.banner h2{font-size:2.5em;} .btn{background:var(--cor-principal); color:white; padding:12px 25px; border-radius:8px; text-decoration:none; font-weight:bold; border:none; cursor:pointer;}
-.btn-whatsapp{background:#25D366;} .btn-whatsapp:hover{background:#128C7E;}
-section{padding:40px 20px; max-width:1200px; margin:auto;} h2{text-align:center; margin-bottom:20px; color:#333;}
-.filtros{display:flex; gap:10px; justify-content:center; margin-bottom:20px;} .filtros button{padding:8px 15px; border:1px solid #ccc; background:white; border-radius:5px; cursor:pointer;}
-.produtos{display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:25px;}
-.produto{background:white; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-.produto img{width:100%; height:200px; object-fit:cover;} .produto-info{padding:15px;} .tag{background:#eee; padding:3px 8px; font-size:12px; border-radius:5px;}
-.preco{color:var(--cor-preco); font-size:20px; font-weight:bold; margin:10px 0;}
-.modal{display:none; position:fixed; z-index:20; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5);}
-.modal-conteudo{background:white; margin:10% auto; padding:20px; width:90%; max-width:500px; border-radius:10px;}
-.fechar{float:right; font-size:28px; cursor:pointer;} footer{background:#222; color:white; text-align:center; padding:30px 20px; margin-top:40px;}
-input{width:100%; padding:10px; margin:10px 0; border:1px solid #ccc; border-radius:5px;}
+nav h1{color:var(--cor-principal); font-size:2em; font-weight:900;}
+nav button{background:var(--cor-principal); color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:bold;}
+nav button:hover{background:var(--cor-hover);}
+
+.carrinho-icone{font-size:24px; cursor:pointer; position:relative;}
+#carrinho-count{background:red; color:white; border-radius:50%; padding:2px 7px; font-size:12px; position:absolute; top:-8px; right:-8px; font-weight:bold;}
+
+.banner{
+  background:linear-gradient(rgba(30,58,138,0.7), rgba(30,58,138,0.7)), url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80') center/cover; 
+  height:40vh; display:flex; align-items:center; justify-content:center; color:white; text-align:center;
+}
+.banner h2{font-size:2.8em; margin-bottom:10px;}
+.banner p{font-size:1.2em;}
+
+.btn{
+  background:var(--cor-principal); color:white; padding:12px 25px; border-radius:8px; 
+  text-decoration:none; font-weight:bold; border:none; cursor:pointer; transition:0.3s;
+  width:100%;
+}
+.btn:hover{background:var(--cor-hover); transform: translateY(-2px);}
+.btn-whatsapp{background:#25D366;} 
+.btn-whatsapp:hover{background:#128C7E;}
+
+section{padding:50px 20px; max-width:1200px; margin:auto;} 
+h2{text-align:center; margin-bottom:30px; color:#333; font-size:2em;}
+
+.filtros{display:flex; gap:10px; justify-content:center; margin-bottom:30px; flex-wrap:wrap;} 
+.filtros button{
+  padding:10px 20px; border:2px solid var(--cor-principal); background:white; color:var(--cor-principal);
+  border-radius:25px; cursor:pointer; font-weight:bold; transition:0.3s;
+}
+.filtros button:hover{background:var(--cor-principal); color:white;}
+
+.produtos{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:25px;}
+.produto{
+  background:white; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  transition:0.3s; display:flex; flex-direction:column;
+}
+.produto:hover{transform: translateY(-5px); box-shadow:0 8px 20px rgba(0,0,0,0.15);}
+.produto img{width:100%; height:220px; object-fit:cover;} 
+.produto-info{padding:20px; flex-grow:1; display:flex; flex-direction:column;}
+.tag{background:#E0E7FF; color:var(--cor-principal); padding:4px 10px; font-size:12px; border-radius:20px; font-weight:bold; align-self:flex-start;}
+.preco{color:var(--cor-preco); font-size:22px; font-weight:bold; margin:10px 0 15px 0;}
+.produto .btn{margin-top:auto;}
+
+/* MODAL LINDO */
+.modal{
+  display:none; position:fixed; z-index:20; left:0; top:0; width:100%; height:100%; 
+  background:rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s;
+}
+@keyframes fadeIn {from{opacity:0} to{opacity:1}}
+
+.modal-conteudo{
+  background:white; margin:8% auto; padding:30px; width:90%; max-width:450px; 
+  border-radius:15px; position:relative; animation: slideDown 0.3s;
+}
+@keyframes slideDown {from{transform:translateY(-50px)} to{transform:translateY(0)}}
+
+.fechar{
+  position:absolute; top:15px; right:20px; font-size:28px; cursor:pointer; color:#999;
+  transition:0.2s;
+}
+.fechar:hover{color:#333; transform:rotate(90deg);}
+.modal-conteudo h2{margin-bottom:20px; color:var(--cor-principal);}
+
+input{
+  width:100%; padding:12px; margin:10px 0; border:2px solid #ddd; border-radius:8px; font-size:16px;
+  transition:0.2s;
+}
+input:focus{border-color:var(--cor-principal); outline:none;}
+
+#itens-carrinho{max-height:300px; overflow-y:auto; margin:20px 0;}
+.item-carrinho{display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee;}
+
+footer{background:#1E293B; color:white; text-align:center; padding:30px 20px; margin-top:40px;}
+
+/* RESPONSIVO PRO CELULAR */
+@media(max-width: 768px){
+  .banner h2{font-size:2em;}
+  nav h1{font-size:1.5em;}
+  .modal-conteudo{margin:20% auto; padding:20px;}
+}

@@ -1,12 +1,27 @@
-const API_URL = "https://jm-server.onrender.com"; // TROCA PELA URL DO RENDER
+const API_URL = window.location.hostname === 'localhost'
+ ? 'http://localhost:3000'
+  : 'https://jm-server.onrender.com'; // troca pela url do seu render
+
 let usuarioLogado = JSON.parse(localStorage.getItem('userJM'));
 let todosProdutos = [];
 let categoriaAtiva = 'todos';
 
+// EVENTOS DOS BOTOES
+document.getElementById('link-cadastro').addEventListener('click', abrirCadastro);
+document.getElementById('btn-cadastrar').addEventListener('click', cadastrar);
+
 async function carregarProdutos() {
-  const res = await fetch(`${API_URL}/api/produtos`);
-  todosProdutos = await res.json();
-  renderizarProdutos();
+  try {
+    document.getElementById('loading').style.display = 'block';
+    const res = await fetch(`${API_URL}/api/produtos`);
+    if(!res.ok) throw new Error("Erro: " + res.status);
+    todosProdutos = await res.json();
+    renderizarProdutos();
+    document.getElementById('loading').style.display = 'none';
+  } catch (error) {
+    console.error("ERRO AO CARREGAR:", error);
+    document.getElementById('loading').innerText = "Erro ao carregar produtos";
+  }
 }
 
 function renderizarProdutos() {
@@ -24,6 +39,7 @@ function renderizarProdutos() {
     </div>
   `).join('');
 }
+
 function filtrar(cat){ categoriaAtiva = cat; renderizarProdutos(); }
 
 function adicionarCarrinho(produto) {
@@ -35,49 +51,31 @@ function adicionarCarrinho(produto) {
   alert(`${produto.nome} adicionado!`);
 }
 
-// Tem que ter isso
-document.getElementById('btn-cadastrar').addEventListener('click', async () => {
-    const email = document.getElementById('email-cadastro').value;
-    const password = document.getElementById('senha-cadastro').value;
-    
-    const res = await fetch(`${API_URL}/api/register`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({email, password})
-    });
-});
-
-async function carregarProdutos() {
-    try {
-        document.getElementById('loading').style.display = 'block'; // mostra "Carregando..."
-        const res = await fetch(`${API_URL}/api/produtos`);
-        
-        if(!res.ok) throw new Error("Erro ao buscar produtos: " + res.status);
-        
-        const produtos = await res.json();
-        console.log("Produtos recebidos:", produtos); // log pra debug
-        
-        // ... aqui vai seu código pra montar os cards
-        
-        document.getElementById('loading').style.display = 'none'; // esconde "Carregando..."
-    } catch (error) {
-        console.error("ERRO AO CARREGAR:", error); // isso vai aparecer no F12
-        document.getElementById('loading').innerText = "Erro ao carregar produtos";
-    }
-}
-
-
 function atualizarContador(){ document.getElementById('carrinho-count').innerText = JSON.parse(localStorage.getItem('carrinhoJM'))?.length || 0; }
-function abrirCarrinho(){ /* ...código do modal igual anterior... */ }
+function abrirCarrinho(){ document.getElementById('modal-carrinho').style.display = 'block'; renderizarCarrinho(); }
 function fecharCarrinho(){ document.getElementById('modal-carrinho').style.display = 'none'; }
 function abrirLogin(){ document.getElementById('modal-login').style.display = 'block'; }
 function fecharLogin(){ document.getElementById('modal-login').style.display = 'none'; }
+function abrirCadastro(){ fecharLogin(); document.getElementById('modal-cadastro').style.display = 'block'; }
+function fecharCadastro(){ document.getElementById('modal-cadastro').style.display = 'none'; }
 
 async function login(){
-  const res = await fetch(`${API_URL}/api/login`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:email.value, senha:senha.value})});
+  const email = document.getElementById('email-login').value;
+  const senha = document.getElementById('senha-login').value;
+  const res = await fetch(`${API_URL}/api/login`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email, senha})});
   const data = await res.json();
   if(data.user){ localStorage.setItem('userJM', JSON.stringify(data.user)); location.reload(); } else alert(data.error);
 }
+
+async function cadastrar(){
+  const email = document.getElementById('email-cadastro').value;
+  const password = document.getElementById('senha-cadastro').value;
+  const res = await fetch(`${API_URL}/api/register`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email, password})});
+  const data = await res.json();
+  if(res.ok){ alert('Cadastrado! Faça login'); fecharCadastro(); abrirLogin(); } else alert(data.error);
+}
+
+function renderizarCarrinho() { /* cola seu código do carrinho aqui */ }
 
 async function finalizar(){
   const carrinho = JSON.parse(localStorage.getItem('carrinhoJM'));
@@ -88,3 +86,5 @@ async function finalizar(){
 }
 
 carregarProdutos(); atualizarContador();
+
+
