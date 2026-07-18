@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header><nav><h1>JM</h1><div id="user-area"><button onclick="abrirLogin()">Entrar</button></div><button id="btnAdmin" onclick="window.location='admin.html'" style="display:none">Painel</button><div class="carrinho-icone" onclick="abrirCarrinho()">🛒 <span id="carrinho-count">0</span></div></nav></header>
+<header><nav><h1>JM</h1><div id="user-area"><button onclick="abrirLogin()">Entrar</button></div><button id="btn-admin" onclick="location.href='admin.html'" style="display:none">Painel</button><div class="carrinho-icone" onclick="abrirCarrinho()">🛒 <span id="carrinho-count">0</span></div></nav></header>
 
 <section class="banner"><div><h2>Bem-vindo à JM Store</h2><p>iPhone, Tênis e T-Shirts com entrega em Luanda</p></div></section>
 
@@ -49,26 +49,13 @@
   <div class="modal-conteudo">
     <span class="fechar" onclick="fecharCarrinho()">&times;</span>
     <h2>Seu Carrinho</h2>
-    <div id="itens-carrinho"></div>
-    <h3>Total: <span id="total-carrinho">0</span> KZ</h3>
+    <div class="carrinho-itens" id="carrinhoItens"></div>
+    <h3>Total: <span id="totalCarrinho">0</span> KZ</h3>
     <button class="btn btn-whatsapp" onclick="finalizar()">Finalizar no WhatsApp</button>
   </div>
 </div>
 
 
-<div class="carrinho-sidebar" id="carrinhoSidebar">
-  <div class="carrinho-header">
-    <h3>Seu Carrinho</h3>
-    <button class="close-btn" onclick="toggleCarrinho()">X</button>
-  </div>
-  <div class="carrinho-itens" id="carrinhoItens">
-    <!-- OS ITENS VÃO APARECER AQUI -->
-  </div>
-  <div class="carrinho-footer">
-    <p>Total: <span id="totalCarrinho">0 KZ</span></p>
-    <button class="btn-finalizar" onclick="finalizarCompra()">Finalizar no WhatsApp</button>
-  </div>
-</div>
 
 <footer><h3>JM Store</h3><p>Luanda - Angola</p><p>© 2026 JM</p></footer>
 <script src="script.js"></script>

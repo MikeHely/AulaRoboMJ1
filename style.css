@@ -100,3 +100,26 @@ footer{background:#1E293B; color:white; text-align:center; padding:30px 20px; ma
 .item-carrinho img{width:50px; height:50px; object-fit:cover; border-radius:5px}
 .item-info{flex:1}
 .item-carrinho button{background:red; color:#fff; border:none; border-radius:50%; width:25px; height:25px; cursor:pointer}
+
+
+
+/* FAZ O CONTEÚDO DO CARRINHO ROLAR */
+#modal-carrinho {
+  overflow-y: auto; /* Scroll geral do modal */
+  max-height: 100vh; /* Não passa da altura da tela */
+}
+
+#modal-carrinho .modal-content {
+  max-height: 60vh; /* 60% da tela pode rolar */
+  overflow-y: auto;
+  padding-right: 10px; /* pra barra de rolagem não cobrir o texto */
+}
+
+/* Deixa o footer grudado em baixo */
+#modal-carrinho .modal-footer {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
