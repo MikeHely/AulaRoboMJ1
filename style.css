@@ -93,3 +93,10 @@ footer{background:#1E293B; color:white; text-align:center; padding:30px 20px; ma
   nav h1{font-size:1.5em;}
   .modal-conteudo{margin:20% auto; padding:20px;}
 }
+
+
+
+.item-carrinho{display:flex; gap:10px; margin-bottom:15px; align-items:center}
+.item-carrinho img{width:50px; height:50px; object-fit:cover; border-radius:5px}
+.item-info{flex:1}
+.item-carrinho button{background:red; color:#fff; border:none; border-radius:50%; width:25px; height:25px; cursor:pointer}

@@ -1,90 +1,183 @@
 const API_URL = window.location.hostname === 'localhost'
  ? 'http://localhost:3000'
-  : 'https://jm-server.onrender.com'; // troca pela url do seu render
+  : 'https://jm-server.onrender.com'; // TROCA PELA URL DO TEU RENDER
 
-let usuarioLogado = JSON.parse(localStorage.getItem('userJM'));
-let todosProdutos = [];
-let categoriaAtiva = 'todos';
+let produtos = [];
+let carrinho = JSON.parse(localStorage.getItem('carrinhoJM')) || [];
+let usuarioLogado = JSON.parse(localStorage.getItem('userJM')) || null;
 
-// EVENTOS DOS BOTOES
-document.getElementById('link-cadastro').addEventListener('click', abrirCadastro);
-document.getElementById('btn-cadastrar').addEventListener('click', cadastrar);
+document.addEventListener('DOMContentLoaded', () => {
+  carregarProdutos();
+  atualizarContadorCarrinho();
+  verificarLogin();
+  renderizarCarrinho(); // Renderiza o carrinho ao carregar a página
+});
 
-async function carregarProdutos() {
-  try {
-    document.getElementById('loading').style.display = 'block';
-    const res = await fetch(`${API_URL}/api/produtos`);
-    if(!res.ok) throw new Error("Erro: " + res.status);
-    todosProdutos = await res.json();
-    renderizarProdutos();
-    document.getElementById('loading').style.display = 'none';
-  } catch (error) {
-    console.error("ERRO AO CARREGAR:", error);
-    document.getElementById('loading').innerText = "Erro ao carregar produtos";
+// MODAIS LOGIN/CADASTRO
+const modalAuth = document.getElementById('modalAuth');
+const btnAbrirLogin = document.getElementById('btnAbrirLogin');
+const btnFecharModal = document.getElementById('btnFecharModal');
+const formAuth = document.getElementById('formAuth');
+const btnTrocarForm = document.getElementById('btnTrocarForm');
+
+btnAbrirLogin?.addEventListener('click', () => modalAuth.style.display = 'flex');
+btnFecharModal?.addEventListener('click', () => modalAuth.style.display = 'none');
+
+let isCadastro = false;
+btnTrocarForm?.addEventListener('click', () => {
+  isCadastro = !isCadastro;
+  document.getElementById('tituloAuth').innerText = isCadastro ? 'Cadastre-se' : 'Login';
+  document.getElementById('btnSubmitAuth').innerText = isCadastro ? 'Cadastrar' : 'Entrar';
+  btnTrocarForm.innerHTML = isCadastro ? 'Já tem conta? <b>Faça Login</b>' : 'Não tem conta? <b>Cadastre-se</b>';
+});
+
+formAuth?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const senha = document.getElementById('senha').value; // Usando "senha" pra bater com o server
+  const url = isCadastro ? '/api/register' : '/api/login';
+
+  const res = await fetch(`${API_URL}${url}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, senha }) // Envia como "senha"
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    alert(data.msg);
+    if (!isCadastro) { // Se for login
+      usuarioLogado = data.user;
+      localStorage.setItem('userJM', JSON.stringify(usuarioLogado));
+      verificarLogin();
+      modalAuth.style.display = 'none';
+    }
+  } else {
+    alert(data.error);
+  }
+});
+
+function verificarLogin() {
+  const areaUsuario = document.getElementById('areaUsuario');
+  const btnAdmin = document.getElementById('btnAdmin');
+  if (usuarioLogado) {
+    areaUsuario.innerHTML = `<span>Olá, ${usuarioLogado.email.split('@')[0]}</span> <button onclick="logout()">Sair</button>`;
+    
+    // MOSTRA BOTÃO ADMIN SÓ PRA ESSE EMAIL
+    if (usuarioLogado.email === 'miguelpjunior18@gmail.com') { // TROCA PELO TEU EMAIL DE ADMIN
+      btnAdmin.style.display = 'block';
+    }
   }
 }
 
-function renderizarProdutos() {
-  const lista = document.getElementById('lista-produtos');
-  const filtrados = categoriaAtiva === 'todos' ? todosProdutos : todosProdutos.filter(p => p.categoria === categoriaAtiva);
-  lista.innerHTML = filtrados.map(p => `
-    <div class="produto">
-      <img src="${p.imagem}">
-      <div class="produto-info">
-        <span class="tag">${p.categoria}</span>
-        <h3>${p.nome}</h3>
-        <p class="preco">${p.preco.toLocaleString('pt-AO')} KZ</p>
-        <button class="btn" onclick='adicionarCarrinho(${JSON.stringify(p)})'>Adicionar</button>
-      </div>
+function logout() {
+  localStorage.removeItem('userJM');
+  usuarioLogado = null;
+  document.getElementById('btnAdmin').style.display = 'none';
+  document.getElementById('areaUsuario').innerHTML = `<button id="btnAbrirLogin">Entrar</button>`;
+  document.getElementById('btnAbrirLogin').addEventListener('click', () => modalAuth.style.display = 'flex');
+}
+
+// PRODUTOS
+async function carregarProdutos() {
+  const res = await fetch(`${API_URL}/api/produtos`);
+  produtos = await res.json();
+  renderizarProdutos(produtos);
+}
+
+function renderizarProdutos(lista) {
+  const grid = document.getElementById('produtos-grid');
+  grid.innerHTML = lista.map(p => `
+    <div class="card-produto">
+      <img src="${p.imagem}" alt="${p.nome}">
+      <h3>${p.nome}</h3>
+      <p class="preco">${p.preco.toLocaleString('pt-PT')} KZ</p>
+      <button class="btn-add" onclick='adicionarAoCarrinho(${JSON.stringify(p)})'>Adicionar</button>
     </div>
   `).join('');
 }
 
-function filtrar(cat){ categoriaAtiva = cat; renderizarProdutos(); }
-
-function adicionarCarrinho(produto) {
-  if(!usuarioLogado) return abrirLogin();
-  let carrinho = JSON.parse(localStorage.getItem('carrinhoJM')) || [];
-  carrinho.push({...produto, quantidade: 1});
+// CARRINHO
+function adicionarAoCarrinho(produto) {
+  const itemNoCarrinho = carrinho.find(i => i.id === produto.id);
+  if (itemNoCarrinho) {
+    itemNoCarrinho.quantidade++;
+  } else {
+    carrinho.push({ ...produto, quantidade: 1 });
+  }
   localStorage.setItem('carrinhoJM', JSON.stringify(carrinho));
-  atualizarContador();
+  atualizarContadorCarrinho();
+  renderizarCarrinho(); // ATUALIZA A LISTA DO CARRINHO
   alert(`${produto.nome} adicionado!`);
 }
 
-function atualizarContador(){ document.getElementById('carrinho-count').innerText = JSON.parse(localStorage.getItem('carrinhoJM'))?.length || 0; }
-function abrirCarrinho(){ document.getElementById('modal-carrinho').style.display = 'block'; renderizarCarrinho(); }
-function fecharCarrinho(){ document.getElementById('modal-carrinho').style.display = 'none'; }
-function abrirLogin(){ document.getElementById('modal-login').style.display = 'block'; }
-function fecharLogin(){ document.getElementById('modal-login').style.display = 'none'; }
-function abrirCadastro(){ fecharLogin(); document.getElementById('modal-cadastro').style.display = 'block'; }
-function fecharCadastro(){ document.getElementById('modal-cadastro').style.display = 'none'; }
+function renderizarCarrinho() {
+  const carrinhoItens = document.getElementById('carrinhoItens');
+  const totalCarrinho = document.getElementById('totalCarrinho');
+  
+  if (!carrinhoItens) return; // Se não estiver na página
 
-async function login(){
-  const email = document.getElementById('email-login').value;
-  const senha = document.getElementById('senha-login').value;
-  const res = await fetch(`${API_URL}/api/login`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email, senha})});
-  const data = await res.json();
-  if(data.user){ localStorage.setItem('userJM', JSON.stringify(data.user)); location.reload(); } else alert(data.error);
+  if (carrinho.length === 0) {
+    carrinhoItens.innerHTML = '<p style="text-align:center; padding: 20px;">Carrinho vazio</p>';
+  } else {
+    carrinhoItens.innerHTML = carrinho.map(item => `
+      <div class="item-carrinho">
+        <img src="${item.imagem}" alt="${item.nome}">
+        <div class="item-info">
+          <p><b>${item.nome}</b></p>
+          <p>${item.preco.toLocaleString('pt-PT')} KZ x ${item.quantidade}</p>
+        </div>
+        <button class="btn-remover" onclick="removerDoCarrinho(${item.id})">X</button>
+      </div>
+    `).join('');
+  }
+  
+  const total = carrinho.reduce((s, i) => s + i.preco * i.quantidade, 0);
+  totalCarrinho.innerText = total.toLocaleString('pt-PT') + ' KZ';
 }
 
-async function cadastrar(){
-  const email = document.getElementById('email-cadastro').value;
-  const password = document.getElementById('senha-cadastro').value;
-  const res = await fetch(`${API_URL}/api/register`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email, password})});
-  const data = await res.json();
-  if(res.ok){ alert('Cadastrado! Faça login'); fecharCadastro(); abrirLogin(); } else alert(data.error);
+function removerDoCarrinho(id) {
+  carrinho = carrinho.filter(i => i.id !== id);
+  localStorage.setItem('carrinhoJM', JSON.stringify(carrinho));
+  renderizarCarrinho();
+  atualizarContadorCarrinho();
 }
 
-function renderizarCarrinho() { /* cola seu código do carrinho aqui */ }
-
-async function finalizar(){
-  const carrinho = JSON.parse(localStorage.getItem('carrinhoJM'));
-  const res = await fetch(`${API_URL}/api/checkout`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({usuario_id: usuarioLogado.id, itens: carrinho})});
-  const data = await res.json();
-  localStorage.removeItem('carrinhoJM');
-  window.location.href = data.link; 
+function atualizarContadorCarrinho() {
+  const totalItens = carrinho.reduce((s, i) => s + i.quantidade, 0);
+  document.getElementById('contadorCarrinho').innerText = totalItens;
 }
 
-carregarProdutos(); atualizarContador();
+function toggleCarrinho() {
+  document.getElementById('carrinhoSidebar').classList.toggle('aberto');
+}
 
+// CHECKOUT
+async function finalizarCompra() {
+  if (!usuarioLogado) {
+    alert('Faça login para finalizar a compra');
+    return modalAuth.style.display = 'flex';
+  }
+  if (carrinho.length === 0) {
+    alert('Seu carrinho está vazio');
+    return;
+  }
 
+  const res = await fetch(`${API_URL}/api/checkout`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ usuario_id: usuarioLogado.id, itens: carrinho })
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    window.open(data.link, '_blank'); // Abre WhatsApp
+    carrinho = [];
+    localStorage.removeItem('carrinhoJM');
+    renderizarCarrinho();
+    atualizarContadorCarrinho();
+    toggleCarrinho();
+  } else {
+    alert('Erro ao finalizar pedido');
+  }
+}
