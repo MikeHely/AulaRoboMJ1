@@ -2,6 +2,7 @@
 <html lang="pt-PT">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel Admin - JM Store</title>
   <link rel="stylesheet" href="admin.css">
 </head>
@@ -9,11 +10,55 @@
   <header>
     <nav>
       <h1>JM Admin</h1>
-      <button onclick="logout()">Sair</button>
+      <div>
+        <button onclick="location.href='index.html'">🏪 Ver Loja</button>
+        <button onclick="logout()">Sair</button>
+      </div>
     </nav>
   </header>
 
   <div class="admin-container">
+    <!-- DASHBOARD -->
+    <div class="dashboard-stats">
+      <div class="stat-card">
+        <h3>📦 Produtos</h3>
+        <p id="stat-produtos">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>🛍️ Pedidos</h3>
+        <p id="stat-pedidos">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>👤 Usuários</h3>
+        <p id="stat-usuarios">0</p>
+      </div>
+      <div class="stat-card" style="background:#FEF3C7;">
+        <h3>🛒 Abandonos</h3>
+        <p id="stat-abandonos" style="color:#92400E;">0</p>
+      </div>
+      <div class="stat-card" style="background:#D1FAE5;">
+        <h3>✅ Finalizados</h3>
+        <p id="stat-finalizados" style="color:#065F46;">0</p>
+      </div>
+    </div>
+
+    <!-- ABANDONOS -->
+    <div style="margin-bottom:30px; padding:20px; background:#FFF7ED; border-radius:10px; border:1px solid #FED7AA;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
+        <h3 style="color:#9A3412;">🛒 Registros de Checkout</h3>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button onclick="limparRegistros('abandonados')" class="btn btn-sm" style="background:#F59E0B;">Limpar Abandonos</button>
+          <button onclick="limparRegistros('finalizados')" class="btn btn-sm" style="background:#22C55E;">Limpar Finalizados</button>
+          <button onclick="limparRegistros('todos')" class="btn btn-sm btn-danger">Limpar Todos</button>
+          <button onclick="atualizarLista()" class="btn btn-sm" style="background:#6366F1;">🔄 Atualizar</button>
+        </div>
+      </div>
+      <div id="abandonos-lista">
+        <p style="text-align:center; padding:20px; color:#666;">Carregando...</p>
+      </div>
+    </div>
+
+    <!-- PRODUTOS -->
     <div class="admin-header">
       <h2>Gerenciar Produtos</h2>
       <button class="btn" onclick="abrirModalNovo()">+ Novo Produto</button>
@@ -29,11 +74,33 @@
         <option value="tenis">Tênis</option>
         <option value="tshirt">T-Shirt</option>
       </select>
-      <input id="imagem" placeholder="URL da Imagem" required>
+      <div style="grid-column: span 2;">
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <input id="imagem" placeholder="URL da Imagem" style="flex:1; min-width:200px;">
+          <div style="display:flex; gap:8px; align-items:center;">
+            <label class="btn" style="background:#6366F1; padding:10px 15px; cursor:pointer; width:auto; margin:0;">
+              📁 Upload
+              <input type="file" id="upload-imagem" accept="image/*" style="display:none;">
+            </label>
+            <div id="upload-status" style="font-size:14px; color:#666;"></div>
+          </div>
+        </div>
+        <div id="preview-container" style="margin-top:10px; display:none;">
+          <img id="preview-imagem" style="max-width:150px; border-radius:8px; border:2px solid #ddd;">
+          <button onclick="removerPreview()" style="margin-left:10px; background:red; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">×</button>
+        </div>
+      </div>
       <button type="submit" class="btn">Salvar Produto</button>
     </form>
 
-    <!-- TABELA DE PRODUTOS -->
+    <!-- FILTROS -->
+    <div class="filtros-admin">
+      <button class="ativo" onclick="filtrarAdmin('todos')">📋 Todos</button>
+      <button onclick="filtrarAdmin('visiveis')">👁️ Visíveis</button>
+      <button onclick="filtrarAdmin('ocultos')">🙈 Ocultos</button>
+    </div>
+
+    <!-- TABELA -->
     <table class="tabela-produtos">
       <thead>
         <tr>
@@ -48,6 +115,18 @@
         <!-- Produtos vão entrar aqui via JS -->
       </tbody>
     </table>
+  </div>
+
+  <!-- MODAL CONFIRMAÇÃO -->
+  <div id="modal-confirmacao" class="modal">
+    <div class="modal-conteudo" style="max-width:400px;">
+      <h3 id="confirmacao-titulo">Tem certeza?</h3>
+      <p id="confirmacao-mensagem" style="margin:15px 0;">Esta ação não pode ser desfeita.</p>
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <button onclick="confirmarAcao(true)" class="btn" style="background:#DC2626; flex:1;">Confirmar</button>
+        <button onclick="confirmarAcao(false)" class="btn" style="background:#666; flex:1;">Cancelar</button>
+      </div>
+    </div>
   </div>
 
   <script src="admin.js"></script>

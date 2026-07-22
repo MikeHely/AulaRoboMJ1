@@ -1,63 +1,199 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JM Store - Qualidade e Preço Justo</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JM Store - Qualidade e Preço Justo</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header><nav><h1>JM</h1><div id="user-area"><button onclick="abrirLogin()">Entrar</button></div><button id="btn-admin" onclick="location.href='admin.html'" style="display:none">Painel</button><div class="carrinho-icone" onclick="abrirCarrinho()">🛒 <span id="carrinho-count">0</span></div></nav></header>
+  <header>
+    <nav>
+      <h1>JM</h1>
+      <div id="user-area">
+        <span id="user-nome"></span>
+        <button onclick="abrirLogin()" id="btn-login">Entrar</button>
+        <button onclick="logout()" id="btn-logout" style="display:none">Sair</button>
+        <button onclick="abrirPerfil()" id="btn-perfil" style="display:none">👤</button>
+      </div>
+      <button id="btn-admin" onclick="location.href='admin.html'" style="display:none">Painel</button>
+      <div class="carrinho-icone" onclick="abrirCarrinho()">
+        🛒 <span id="carrinho-count">0</span>
+      </div>
+    </nav>
+  </header>
 
-<section class="banner"><div><h2>Bem-vindo à JM Store</h2><p>iPhone, Tênis e T-Shirts com entrega em Luanda</p></div></section>
+  <!-- BANNER -->
+  <section class="banner">
+    <div>
+      <h2>🔥 Ofertas Imperdíveis</h2>
+      <p>iPhone, Tênis e T-Shirts com entrega em Luanda</p>
+      <p style="font-size:14px; margin-top:10px; opacity:0.8;">⭐ Mais de 500 clientes satisfeitos</p>
+    </div>
+  </section>
 
-<section id="produtos">
-  <h2>Nossos Produtos</h2>
-  <div class="filtros">
-    <button onclick="filtrar('todos')">Todos</button>
-    <button onclick="filtrar('iphone')">iPhone</button>
-    <button onclick="filtrar('tenis')">Tênis</button>
-    <button onclick="filtrar('tshirt')">T-shirt</button>
+  <!-- COPY 1 - BARRA DE DESTAQUE -->
+  <div style="background: #1E3A8A; color: white; padding: 12px; text-align: center; font-size: 14px;">
+    🚀 <strong>Frete Grátis</strong> em compras acima de 200.000 KZ | 
+    📦 Entregamos em toda Luanda | 
+    💳 Parcelamos em até 3x sem juros
   </div>
-  <div class="produtos" id="lista-produtos"><p id="loading">Carregando...</p></div> 
-</section>
 
-<!-- MODAL LOGIN -->
-<div id="modal-login" class="modal">
-  <div class="modal-conteudo">
-    <span class="fechar" onclick="fecharLogin()">&times;</span>
-    <h2>Login JM</h2>
-    <input id="email-login" placeholder="Email">
-    <input id="senha-login" type="password" placeholder="Senha">
-    <button class="btn" onclick="login()">Entrar</button>
-    <p>Não tem conta? <a href="#" id="link-cadastro">Cadastre-se</a></p>
+  <section id="produtos">
+    <h2>Nossos Produtos</h2>
+    
+    <!-- COPY 2 - ANTES DOS PRODUTOS -->
+    <div style="text-align: center; max-width: 600px; margin: 0 auto 30px; padding: 20px; background: #F0FDF4; border-radius: 12px; border: 2px dashed #22C55E;">
+      <p style="font-size: 18px; font-weight: bold; color: #065F46;">🌟 Produtos Premium com Preço Justo</p>
+      <p style="color: #374151;">Todos os nossos produtos são selecionados com qualidade garantida. 
+      <br>Compre com confiança!</p>
+    </div>
+    
+    <div class="filtros" id="filtros-categorias">
+      <button onclick="filtrar('todos')" class="ativo">Todos</button>
+    </div>
+    <div class="produtos" id="lista-produtos">
+      <p id="loading">Carregando...</p>
+    </div>
+    
+    <!-- COPY 3 - DEPOIS DOS PRODUTOS -->
+    <div style="text-align: center; max-width: 700px; margin: 40px auto 0; padding: 30px; background: #EFF6FF; border-radius: 12px;">
+      <p style="font-size: 20px; font-weight: bold; color: #1E3A8A;">💎 Por que comprar na JM Store?</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-top: 20px;">
+        <div>
+          <span style="font-size: 30px;">✅</span>
+          <p style="font-weight: bold;">Qualidade Garantida</p>
+          <p style="font-size: 13px; color: #666;">Produtos originais e testados</p>
+        </div>
+        <div>
+          <span style="font-size: 30px;">🚀</span>
+          <p style="font-weight: bold;">Entrega Rápida</p>
+          <p style="font-size: 13px; color: #666;">Em até 24h em Luanda</p>
+        </div>
+        <div>
+          <span style="font-size: 30px;">💳</span>
+          <p style="font-weight: bold;">Pagamento Seguro</p>
+          <p style="font-size: 13px; color: #666;">WhatsApp com confirmação</p>
+        </div>
+        <div>
+          <span style="font-size: 30px;">⭐</span>
+          <p style="font-weight: bold;">Clientes Felizes</p>
+          <p style="font-size: 13px; color: #666;">Avaliações 5 estrelas</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COPY 4 - RODAPÉ COM CTA -->
+  <div style="background: #F8FAFC; padding: 40px 20px; text-align: center;">
+    <h3 style="color: #1E3A8A;">🛍️ Pronto para fazer sua compra?</h3>
+    <p style="color: #374151; max-width: 500px; margin: 10px auto;">Escolha seus produtos favoritos e finalize pelo WhatsApp. 
+    <br>Estamos prontos para te atender!</p>
+    <button onclick="document.getElementById('produtos').scrollIntoView({behavior:'smooth'})" 
+            style="background: #1E3A8A; color: white; border: none; padding: 15px 40px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px;">
+      👉 Ver Produtos
+    </button>
   </div>
-</div>
 
-<!-- MODAL CADASTRO NOVO -->
-<div id="modal-cadastro" class="modal">
-  <div class="modal-conteudo">
-    <span class="fechar" onclick="fecharCadastro()">&times;</span>
-    <h2>Cadastro JM</h2>
-    <input id="email-cadastro" placeholder="Email">
-    <input id="senha-cadastro" type="password" placeholder="Senha">
-    <button class="btn" id="btn-cadastrar">Cadastrar</button>
+  <!-- BOTÃO FLUTUANTE WHATSAPP -->
+  <a href="https://wa.me/244949321312?text=Olá%20JM%20Store!%20Gostaria%20de%20saber%20mais%20sobre%20os%20produtos." 
+     target="_blank" 
+     class="whatsapp-float"
+     style="position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; 
+            width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; font-size: 30px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 1000; text-decoration: none; transition: all 0.3s ease;">
+    💬
+    <span style="position: absolute; top: -5px; right: -5px; background: red; color: white; 
+                 border-radius: 50%; width: 20px; height: 20px; font-size: 10px; 
+                 display: flex; align-items: center; justify-content: center; font-weight: bold;">
+      1
+    </span>
+  </a>
+
+  <!-- FOOTER -->
+  <footer>
+    <h3>JM Store</h3>
+    <p>Luanda - Angola</p>
+    <p>© 2024 JM Store - Qualidade e Preço Justo</p>
+  </footer>
+
+  <!-- MODAL LOGIN -->
+  <div id="modal-login" class="modal">
+    <div class="modal-conteudo">
+      <span class="fechar" onclick="fecharLogin()">&times;</span>
+      <h2>Login JM</h2>
+      <input id="email-login" placeholder="Email" type="email">
+      <input id="senha-login" type="password" placeholder="Senha">
+      <button class="btn" onclick="login()">Entrar</button>
+      <p>Não tem conta? <a href="#" id="link-cadastro">Cadastre-se</a></p>
+    </div>
   </div>
-</div>
 
-<!-- MODAL CARRINHO -->
-<div id="modal-carrinho" class="modal">
-  <div class="modal-conteudo">
-    <span class="fechar" onclick="fecharCarrinho()">&times;</span>
-    <h2>Seu Carrinho</h2>
-    <div class="carrinho-itens" id="carrinhoItens"></div>
-    <h3>Total: <span id="totalCarrinho">0</span> KZ</h3>
-    <button class="btn btn-whatsapp" onclick="finalizar()">Finalizar no WhatsApp</button>
+  <!-- MODAL CADASTRO -->
+  <div id="modal-cadastro" class="modal">
+    <div class="modal-conteudo">
+      <span class="fechar" onclick="fecharCadastro()">&times;</span>
+      <h2>Cadastro JM</h2>
+      <input id="nome-cadastro" placeholder="Nome completo" required>
+      <input id="email-cadastro" placeholder="Email" type="email" required>
+      <input id="telefone-cadastro" placeholder="Telefone (ex: 944000000)" required>
+      <input id="regiao-cadastro" placeholder="Região (ex: Luanda, Kilamba)" required>
+      <input id="senha-cadastro" type="password" placeholder="Senha (mínimo 6 caracteres)" required>
+      <button class="btn" id="btn-cadastrar">Cadastrar</button>
+      <p>Já tem conta? <a href="#" id="link-login">Faça login</a></p>
+    </div>
   </div>
-</div>
 
+  <!-- MODAL PERFIL -->
+  <div id="modal-perfil" class="modal">
+    <div class="modal-conteudo">
+      <span class="fechar" onclick="fecharPerfil()">&times;</span>
+      <h2>👤 Meu Perfil</h2>
+      <div id="perfil-info">
+        <p><strong>Nome:</strong> <span id="perfil-nome"></span></p>
+        <p><strong>Email:</strong> <span id="perfil-email"></span></p>
+        <p><strong>Telefone:</strong> <span id="perfil-telefone"></span></p>
+        <p><strong>Região:</strong> <span id="perfil-regiao"></span></p>
+        <p><strong>Membro desde:</strong> <span id="perfil-data"></span></p>
+      </div>
+      <button class="btn" onclick="abrirEditarPerfil()">✏️ Editar Perfil</button>
+      <button class="btn" onclick="verPedidos()" style="background:#6366F1;">📦 Meus Pedidos</button>
+      <div id="perfil-pedidos" style="margin-top:15px; display:none;"></div>
+    </div>
+  </div>
 
+  <!-- MODAL EDITAR PERFIL -->
+  <div id="modal-editar-perfil" class="modal">
+    <div class="modal-conteudo">
+      <span class="fechar" onclick="fecharEditarPerfil()">&times;</span>
+      <h2>✏️ Editar Perfil</h2>
+      <input id="editar-nome" placeholder="Nome completo">
+      <input id="editar-telefone" placeholder="Telefone">
+      <input id="editar-regiao" placeholder="Região">
+      <button class="btn" onclick="salvarPerfil()">Salvar</button>
+    </div>
+  </div>
 
-<footer><h3>JM Store</h3><p>Luanda - Angola</p><p>© 2026 JM</p></footer>
-<script src="script.js"></script>
+  <!-- MODAL CARRINHO -->
+  <div id="modal-carrinho" class="modal">
+    <div class="modal-conteudo">
+      <span class="fechar" onclick="fecharCarrinho()">&times;</span>
+      <h2>🛒 Seu Carrinho</h2>
+      <div class="carrinho-itens" id="carrinhoItens"></div>
+      <h3>Total: <span id="totalCarrinho">0</span> KZ</h3>
+      <div style="margin: 10px 0;">
+        <input id="endereco-entrega" placeholder="Endereço de entrega (opcional)" style="width:100%;">
+        <select id="metodo-pagamento" style="width:100%; margin-top:5px;">
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="Transferência Bancária">Transferência Bancária</option>
+          <option value="Pagamento na Entrega">Pagamento na Entrega</option>
+        </select>
+      </div>
+      <button class="btn btn-whatsapp" onclick="finalizar()">📱 Finalizar no WhatsApp</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
