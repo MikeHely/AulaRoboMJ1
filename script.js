@@ -59,6 +59,58 @@ function capitalizar(texto) {
   return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
+async function cadastrar() {
+  const nome = document.getElementById('nome-cadastro').value;
+  const email = document.getElementById('email-cadastro').value;
+  const telefone = document.getElementById('telefone-cadastro').value;
+  const regiao = document.getElementById('regiao-cadastro').value;
+  const senha = document.getElementById('senha-cadastro').value;
+  
+  // VALIDAÇÃO
+  if (!nome || !email || !telefone || !regiao || !senha) {
+    alert('⚠️ Preencha todos os campos!');
+    return;
+  }
+  
+  if (senha.length < 6) {
+    alert('⚠️ A senha deve ter pelo menos 6 caracteres!');
+    return;
+  }
+  
+  // MOSTRAR O QUE ESTÁ SENDO ENVIADO
+  console.log('📝 Enviando cadastro:', { nome, email, telefone, regiao, password: senha });
+  
+  try {
+    const res = await fetch(`${API_URL}/api/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        nome, 
+        email, 
+        telefone, 
+        regiao, 
+        password: senha 
+      })
+    });
+    
+    const data = await res.json();
+    console.log('📝 Resposta:', data);
+    
+    if (res.ok) {
+      alert('✅ Cadastro realizado! Faça login.');
+      fecharCadastro();
+      abrirLogin();
+      document.getElementById('email-login').value = email;
+    } else {
+      alert('❌ ' + (data.error || 'Erro ao cadastrar'));
+    }
+  } catch (error) {
+    console.error('❌ Erro:', error);
+    alert('❌ Erro de conexão com o servidor');
+  }
+}
+
+
 // ===== PRODUTOS =====
 async function carregarProdutos() {
   try {
