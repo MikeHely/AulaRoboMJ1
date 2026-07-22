@@ -1,6 +1,4 @@
-const API_URL = window.location.hostname === 'localhost'
-  ? 'http://localhost:3000'
-  : 'https://jm-server.onrender.com';
+const API_URL = 'https://jm-server.onrender.com';
 
 let usuarioLogado = JSON.parse(localStorage.getItem('userJM'));
 let tokenJM = localStorage.getItem('tokenJM');
