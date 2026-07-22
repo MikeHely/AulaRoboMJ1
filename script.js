@@ -108,6 +108,11 @@ function filtrar(cat) {
   renderizarProdutos();
 }
 
+// script.js - Mostra o botão se for admin
+if (usuarioLogado && usuarioLogado.is_admin) {
+  document.getElementById('btn-admin').style.display = 'inline-block';
+}
+
 // ===== USUÁRIO =====
 function atualizarUIUsuario() {
   const btnLogin = document.getElementById('btn-login');
