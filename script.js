@@ -40,6 +40,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 });
 
+
+function abrirCarrinho() {
+  document.getElementById('modal-carrinho').style.display = 'block';
+  renderizarCarrinho();
+  
+  // REGISTRA QUE O USUÁRIO ABRIU O CARRINHO
+  registrarCheckout();
+}
+
+function fecharCarrinho() {
+  document.getElementById('modal-carrinho').style.display = 'none';
+}
 // ===== CATEGORIAS =====
 async function carregarCategorias() {
   try {
