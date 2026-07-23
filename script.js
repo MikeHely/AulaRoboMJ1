@@ -462,17 +462,8 @@ function atualizarContador() {
   document.getElementById('carrinho-count').textContent = total;
 }
 
-function abrirCarrinho() {
-  document.getElementById('modal-carrinho').style.display = 'block';
-  renderizarCarrinho();
-  
-  // REGISTRA QUE O USUÁRIO ABRIU O CARRINHO
-  registrarCheckout();
-}
 
-function fecharCarrinho() {
-  document.getElementById('modal-carrinho').style.display = 'none';
-}
+
 
 // ===== RASTREIO DE ABANDONO =====
 async function registrarCheckout() {
