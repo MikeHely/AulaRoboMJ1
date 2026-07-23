@@ -1,4 +1,3 @@
-const API_URL = 'https://jm-server.onrender.com';
 
 let usuarioLogado = JSON.parse(localStorage.getItem('userJM'));
 let tokenJM = localStorage.getItem('tokenJM');
@@ -6,6 +5,7 @@ let todosProdutos = [];
 let categoriaAtiva = 'todos';
 let carrinho = [];
 let sessionId = localStorage.getItem('sessionId') || `sessao_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+const API_URL = 'https://jm-server.onrender.com';
 
 localStorage.setItem('sessionId', sessionId);
 
@@ -52,6 +52,24 @@ function abrirCarrinho() {
 function fecharCarrinho() {
   document.getElementById('modal-carrinho').style.display = 'none';
 }
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // Carrega produtos e categorias
+  await carregarCategorias();
+  await carregarProdutos();
+  
+  // RESTAURA A SESSÃO
+  atualizarUIUsuario(); // ← ESSENCIAL!
+  
+  if (usuarioLogado && tokenJM) {
+    await carregarCarrinhoServidor();
+  }
+  atualizarContador();
+  
+  // Event listeners...
+});
+
 // ===== CATEGORIAS =====
 async function carregarCategorias() {
   try {
